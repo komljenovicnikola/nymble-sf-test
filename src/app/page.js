@@ -27,7 +27,7 @@ function WebToLeadForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(process.env.sfURL, new URLSearchParams(formData).toString(), {
+      const _ = await axios.post(process.env.sfURL, formData, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
