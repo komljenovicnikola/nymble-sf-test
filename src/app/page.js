@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 function WebToLeadForm() {
   const [formData, setFormData] = useState({
@@ -25,20 +26,16 @@ function WebToLeadForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    response = await fetch(`${process.env.sfURL}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: new URLSearchParams(formData).toString(),
-    });
-    if (!response.ok) {
-      // Handle error
+    try {
+      const response = await axios.post(process.env.sfURL, new URLSearchParams(formData).toString(), {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      });
+      console.log('Submission successful');
+    } catch (error) {
       console.error('Submission failed');
-      return;
     }
-    // Handle success
-    console.log('Submission successful');
   };
 
   return (
