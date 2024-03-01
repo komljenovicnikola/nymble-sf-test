@@ -25,7 +25,7 @@ function WebToLeadForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await fetch(`${process.env.sfURL}`, {
+    response = await fetch(`${process.env.sfURL}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
