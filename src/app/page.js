@@ -5,10 +5,10 @@ import { useState } from 'react';
 const LeadForm = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(process.env.NEXT_PUBLIC_SALESFORCE_OID);
 
     const formData = {
       oid: process.env.NEXT_PUBLIC_SALESFORCE_OID,
@@ -27,6 +27,7 @@ const LeadForm = () => {
 
     if (response.ok) {
       console.log('Submission successful');
+      setIsSubmitted(true);
     } else {
       console.error('Submission failed');
     }
@@ -59,7 +60,7 @@ const LeadForm = () => {
           onChange={(e) => setLastName(e.target.value)}
         />
       </div>
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-center">
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
           type="submit"
@@ -67,6 +68,11 @@ const LeadForm = () => {
           Submit
         </button>
       </div>
+      {isSubmitted && (
+      <div className="mt-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+        <span className="block sm:inline">Form successfully submitted.</span>
+      </div>
+    )}
     </form>
   </div>
   );
