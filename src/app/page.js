@@ -1,67 +1,72 @@
 'use client'
 
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useState } from 'react';
 
-function WebToLeadForm() {
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-  });
+const LeadForm = () => {
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
 
-  useEffect(() => {
-    setFormData({
-      firstName: '',
-      lastName: '',
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const formData = {
+      oid: process.env.SALESFORCE_OID,
+      retURL: process.env.SALESFORCE_RETURL,
+      first_name: firstName,
+      last_name: lastName,
+    };
+
+    const response = await fetch('/api/proxy', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams(formData).toString(),
     });
-  }, []);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post('https://webto.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8&orgId=00D2o000000kt9l', encodeFormData(formData), {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-      });
-      console.log('Submission successful:', response.data);
-    } catch (error) {
-      console.error('Submission failed:', error.message);
+    if (response.ok) {
+      console.log('Submission successful');
+    } else {
+      console.error('Submission failed');
     }
   };
 
-  const encodeFormData = (data) => {
-    return Object.keys(data)
-      .map((key) => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
-      .join('&');
-  };
-
   return (
-    <form onSubmit={handleSubmit} className="max-w-sm mx-auto">
-      <input type="hidden" name="oid" value='http://https://sf-test.nikolakomljenovic.com/test' />
-      <input type="hidden" name="retURL" value={process.env.retURL} />
-
+    <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
       <div className="mb-4">
-        <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">First Name:</label>
-        <input type="text" id="firstName" name="firstName" value={formData.firstName} onChange={handleChange} required className="mt-1 p-2 block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" />
+        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="firstName">
+          First Name
+        </label>
+        <input
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="firstName"
+          type="text"
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+        />
       </div>
-
-      <div className="mb-4">
-        <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">Last Name:</label>
-        <input type="text" id="lastName" name="lastName" value={formData.lastName} onChange={handleChange} required className="mt-1 p-2 block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" />
+      <div className="mb-6">
+        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="lastName">
+          Last Name
+        </label>
+        <input
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="lastName"
+          type="text"
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
+        />
       </div>
-
-      <button type="submit" className="w-full bg-indigo-600 text-white p-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Submit</button>
+      <div className="flex items-center justify-between">
+        <button
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          type="submit"
+        >
+          Submit
+        </button>
+      </div>
     </form>
   );
-}
+};
 
-export default WebToLeadForm;
+export default LeadForm;
