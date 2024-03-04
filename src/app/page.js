@@ -8,10 +8,11 @@ const LeadForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    console.log(process.env.NEXT_PUBLIC_SALESFORCE_OID);
 
     const formData = {
-      oid: process.env.SALESFORCE_OID,
-      retURL: process.env.SALESFORCE_RETURL,
+      oid: process.env.NEXT_PUBLIC_SALESFORCE_OID,
+      retURL: process.env.NEXT_PUBLIC_SALESFORCE_RETURL,
       first_name: firstName,
       last_name: lastName,
     };
@@ -32,6 +33,7 @@ const LeadForm = () => {
   };
 
   return (
+    <div className="flex items-center justify-center min-h-screen">
     <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
       <div className="mb-4">
         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="firstName">
@@ -66,6 +68,7 @@ const LeadForm = () => {
         </button>
       </div>
     </form>
+  </div>
   );
 };
 

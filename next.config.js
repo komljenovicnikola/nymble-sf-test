@@ -3,7 +3,7 @@ module.exports = {
       return [
         {
           source: '/api/proxy',
-          destination: process.env.SALESFORCE_URL,
+          destination: process.env.NEXT_PUBLIC_SALESFORCE_URL,
         },
       ];
     },
