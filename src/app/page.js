@@ -18,24 +18,30 @@ function WebToLeadForm() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const _ = await axios.post(process.env.sfURL, formData, {
+      const response = await axios.post(process.env.sfURL, encodeFormData(formData), {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
       });
-      console.log('Submission successful');
+      console.log('Submission successful:', response.data);
     } catch (error) {
-      console.error('Submission failed');
+      console.error('Submission failed:', error.message);
     }
+  };
+
+  const encodeFormData = (data) => {
+    return Object.keys(data)
+      .map((key) => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
+      .join('&');
   };
 
   return (
@@ -59,4 +65,3 @@ function WebToLeadForm() {
 }
 
 export default WebToLeadForm;
-
