@@ -27,7 +27,7 @@ function WebToLeadForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(process.env.sfURL, encodeFormData(formData), {
+      const response = await axios.post('https://webto.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8&orgId=00D2o000000kt9l', encodeFormData(formData), {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
@@ -46,7 +46,7 @@ function WebToLeadForm() {
 
   return (
     <form onSubmit={handleSubmit} className="max-w-sm mx-auto">
-      <input type="hidden" name="oid" value={process.env.oid} />
+      <input type="hidden" name="oid" value='http://https://sf-test.nikolakomljenovic.com/test' />
       <input type="hidden" name="retURL" value={process.env.retURL} />
 
       <div className="mb-4">
