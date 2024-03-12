@@ -1,11 +1,12 @@
 'use client'
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const LeadForm = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [clientId, setClientId] = useState('');
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -15,6 +16,7 @@ const LeadForm = () => {
       retURL: process.env.NEXT_PUBLIC_SALESFORCE_RETURL,
       first_name: firstName,
       last_name: lastName,
+      gaClientId: clientId, // Include GA Client ID in form data
     };
 
     const response = await fetch('/api/proxy', {
@@ -33,9 +35,35 @@ const LeadForm = () => {
     }
   };
 
+  useEffect(() => {
+    // Function to get the Google Analytics Client ID
+    const getClientId = () => {
+      if (window.ga) {
+        const tracker = window.ga.getAll()[0];
+        if (tracker) {
+          const clientId = tracker.get('clientId');
+          setClientId(clientId);
+          console.log("GA Client ID: ", clientId);
+        }
+      }
+    };
+
+    getClientId();
+
+    // Add event listener to handle changes in GA Client ID (if needed)
+    const handleClientIdChange = () => {
+      getClientId();
+    };
+    window.addEventListener('load', handleClientIdChange);
+
+    return () => {
+      window.removeEventListener('load', handleClientIdChange);
+    };
+  }, []);
+
   return (
     <div className="flex items-center justify-center min-h-screen">
-    <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+      <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
       <div className="mb-4">
         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="firstName">
           First Name
