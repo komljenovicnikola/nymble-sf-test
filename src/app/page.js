@@ -36,7 +36,6 @@ const LeadForm = () => {
   };
 
   useEffect(() => {
-    // Function to get the Google Analytics Client ID
     const getClientId = () => {
       if (window.ga) {
         const tracker = window.ga.getAll()[0];
