@@ -37,7 +37,7 @@ const LeadForm = () => {
 
   useEffect(() => {
     const getClientId = () => {
-      if (window.ga) {
+      if (window.gaGlobal) {
         const tracker = window.gaGlobal.getAll()[0];
         if (tracker) {
           const clientId = tracker.get('vid');
