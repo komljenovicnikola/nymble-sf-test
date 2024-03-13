@@ -38,9 +38,9 @@ const LeadForm = () => {
   useEffect(() => {
     const getClientId = () => {
       if (window.gaGlobal) {
-        const tracker = window.gaGlobal.getAll()[0];
+        const tracker = window.gaGlobal;
         if (tracker) {
-          const clientId = tracker.get('vid');
+          const clientId = tracker.vid;
           setClientId(clientId);
           console.log("GA Client ID: ", clientId);
         }
