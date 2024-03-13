@@ -16,7 +16,7 @@ const LeadForm = () => {
       retURL: process.env.NEXT_PUBLIC_SALESFORCE_RETURL,
       first_name: firstName,
       last_name: lastName,
-      GA_Client_ID: clientId, // Include GA Client ID in form data
+      ga__c: clientId, // Include GA Client ID in form data
     };
 
     const response = await fetch('/api/proxy', {
